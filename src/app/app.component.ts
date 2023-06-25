@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component } from '@angular/core';
+import { Component, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -19,11 +19,11 @@ import { Component } from '@angular/core';
         'final',
         style({
           backgroundColor: 'red',
-          width: '200px',
-          height: '200px',
+          width: '500px',
+          height: '500px',
         })
       ),
-      transition('initial=>final', animate('1500ms')),
+      transition('initial=>final', animate('4500ms')),
       transition('final=>initial', animate('1000ms')),
     ]),
   ],
@@ -32,10 +32,17 @@ export class AppComponent {
   title = 'juli';
   currentState = 'initial';
 
+  constructor(private renderer: Renderer2){}
+
   payMethod() {
     this.currentState = this.currentState === 'initial' ? 'final' : 'initial';
+    const dynamicDiv = this.renderer.createElement('div');
+    const text = this.renderer.createText('¡Vas a lograr todo lo que te propongas ♥');
+    this.renderer.appendChild(dynamicDiv, text);
+    const container = this.renderer.selectRootElement('#dynamicDiv');
+    this.renderer.appendChild(container, dynamicDiv);
     setTimeout(() => {
-      console.warn("vas a lograr todo lo que te propongas ♥")
-    }, 1500);
+      this.renderer.removeChild(container, dynamicDiv);
+    }, 4500);
   }
 }
